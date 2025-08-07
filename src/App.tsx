@@ -91,10 +91,12 @@ function App(): ReactElement {
     setRightAmount(tempAmount)
   }, [leftToken, rightToken, leftAmount, rightAmount])
 
-
   return (
     <div className="app">
-      <div className="container">
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+      <div className="container" id="main-content">
         <div className="header-section">
           <h1 className="title">Token Price Explorer</h1>
           <p className="subtitle">Real-time cryptocurrency conversion with live market data</p>
@@ -117,14 +119,15 @@ function App(): ReactElement {
               <>
                 {/* Token Selector */}
                 <div className="card-token-selector">
-                  <select 
+                  <select
                     className="card-token-dropdown"
                     value={leftToken?.symbol || 'USDC'}
                     onChange={(e) => {
-                      const token = tokens.find(t => t.symbol === e.target.value)
+                      const token = tokens.find((t) => t.symbol === e.target.value)
                       if (token) setLeftToken(token)
                     }}
                     disabled={isLoading}
+                    aria-label="Select source token"
                   >
                     {SUPPORTED_TOKENS.map((token) => (
                       <option key={token.symbol} value={token.symbol}>
@@ -146,13 +149,18 @@ function App(): ReactElement {
                 </div>
 
                 <div className="token-input-section">
-                  <label className="input-label">Amount</label>
+                  <label className="input-label" htmlFor="left-amount">
+                    Amount
+                  </label>
                   <input
+                    id="left-amount"
                     type="text"
                     className="token-input"
                     value={leftAmount}
                     onChange={handleLeftAmountChange}
                     placeholder="0.00"
+                    aria-label="Source token amount"
+                    inputMode="decimal"
                   />
                   <div className="token-value">
                     ≈ $
@@ -185,7 +193,12 @@ function App(): ReactElement {
           </div>
 
           {/* Arrow/Swap Button */}
-          <button className="swap-arrow" onClick={handleSwap} disabled={isLoading}>
+          <button
+            className="swap-arrow"
+            onClick={handleSwap}
+            disabled={isLoading}
+            aria-label="Swap tokens"
+          >
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
               <path
                 d="M7 16V4M7 4L3 8M7 4L11 8M17 8V20M17 20L21 16M17 20L13 16"
@@ -209,14 +222,15 @@ function App(): ReactElement {
               <>
                 {/* Token Selector */}
                 <div className="card-token-selector">
-                  <select 
+                  <select
                     className="card-token-dropdown"
                     value={rightToken?.symbol || 'ETH'}
                     onChange={(e) => {
-                      const token = tokens.find(t => t.symbol === e.target.value)
+                      const token = tokens.find((t) => t.symbol === e.target.value)
                       if (token) setRightToken(token)
                     }}
                     disabled={isLoading}
+                    aria-label="Select target token"
                   >
                     {SUPPORTED_TOKENS.map((token) => (
                       <option key={token.symbol} value={token.symbol}>
@@ -238,13 +252,18 @@ function App(): ReactElement {
                 </div>
 
                 <div className="token-input-section">
-                  <label className="input-label">Amount</label>
+                  <label className="input-label" htmlFor="right-amount">
+                    Amount
+                  </label>
                   <input
+                    id="right-amount"
                     type="text"
                     className="token-input"
                     value={rightAmount}
                     onChange={handleRightAmountChange}
                     placeholder="0.00"
+                    aria-label="Target token amount"
+                    inputMode="decimal"
                   />
                   <div className="token-value">
                     ≈ $
@@ -295,7 +314,6 @@ function App(): ReactElement {
             </div>
           </div>
         )}
-
       </div>
     </div>
   )

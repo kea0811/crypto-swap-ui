@@ -1,4 +1,5 @@
 import { getAssetErc20ByChainAndSymbol, getAssetPriceInfo } from '@funkit/api-base'
+import { perfMonitor } from '../utils/performance'
 
 const API_KEY = import.meta.env['VITE_FUNKIT_API_KEY']
 
@@ -18,13 +19,18 @@ class ResponseCache {
 
   get<T>(key: string): T | null {
     const entry = this.cache.get(key) as CacheEntry<T> | undefined
-    if (!entry) return null
-
-    if (Date.now() - entry.timestamp > this.TTL) {
-      this.cache.delete(key)
+    if (!entry) {
+      perfMonitor.recordCacheMiss()
       return null
     }
 
+    if (Date.now() - entry.timestamp > this.TTL) {
+      this.cache.delete(key)
+      perfMonitor.recordCacheMiss()
+      return null
+    }
+
+    perfMonitor.recordCacheHit()
     return entry.data
   }
 
