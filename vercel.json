@@ -1,3 +1,5 @@
 {
-  "rootDirectory": "crypto-swap-ui"
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "dist",
+  "installCommand": "pnpm install"
 }
